@@ -17,3 +17,9 @@ This project was developed by following the **"Complete Backend Engineering Cour
 - [PostgreSQL](https://www.postgresql.org/download/) (if applicable)
 - [Docker](https://docs.docker.com/get-docker/) (optional, for containerization)
 - [direnv](https://direnv.net/) (optional, for managing `.env` files)
+
+## some useful commands
+
+- migrate create -seq -ext sql -dir ./cmd/migrate/migrations create_users
+- migrate -path=./cmd/migrate/migrations -database="postgres://admin:adminpassword@localhost/social?sslmode=disable" up
+- migrate -path=./cmd/migrate/migrations -database="postgres://admin:adminpassword@localhost/social?sslmode=disable" down
