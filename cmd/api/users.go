@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 
@@ -72,7 +71,7 @@ func (app *application) followUserHandler(w http.ResponseWriter, r *http.Request
 	followerUser := getUserFromContext(r)
 	followedID, err := strconv.ParseInt(chi.URLParam(r, "userID"), 10, 64)
 	if err != nil {
-		app.badRequestResponse(w,r,err)
+		app.badRequestResponse(w, r, err)
 		return
 	}
 	ctx := r.Context()
@@ -109,7 +108,7 @@ func (app *application) unfollowUserHandler(w http.ResponseWriter, r *http.Reque
 	followerUser := getUserFromContext(r)
 	unfollowedID, err := strconv.ParseInt(chi.URLParam(r, "userID"), 10, 64)
 	if err != nil {
-		app.badRequestResponse(w,r,err)
+		app.badRequestResponse(w, r, err)
 		return
 	}
 
@@ -145,15 +144,15 @@ func (app *application) activateUserHandler(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		switch err {
 		case store.ErrNotFound:
-			app.notFoundResponse(w,r,err)
+			app.notFoundResponse(w, r, err)
 		default:
-			app.internalServerError(w,r,err)
+			app.internalServerError(w, r, err)
 		}
 		return
 	}
 
 	if err := app.jsonResponse(w, http.StatusNoContent, ""); err != nil {
-		app.internalServerError(w,r, err)
+		app.internalServerError(w, r, err)
 	}
 }
 
