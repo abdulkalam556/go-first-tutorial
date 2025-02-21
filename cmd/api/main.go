@@ -1,12 +1,15 @@
 package main
 
 import (
+	"expvar"
+	"runtime"
 	"time"
 
 	"github.com/MishNia/Sportify/internal/auth"
 	"github.com/MishNia/Sportify/internal/db"
 	"github.com/MishNia/Sportify/internal/env"
 	"github.com/MishNia/Sportify/internal/mailer"
+	"github.com/MishNia/Sportify/internal/ratelimiter"
 	"github.com/MishNia/Sportify/internal/store"
 	"github.com/MishNia/Sportify/internal/store/cache"
 	"github.com/go-redis/redis/v8"
@@ -68,6 +71,11 @@ func main() {
 				iss:    "social",
 			},
 		},
+		rateLimiter: ratelimiter.Config{
+			RequestsPerTimeFrame: env.GetInt("RATELIMITER_REQUESTS_COUNT", 20),
+			TimeFrame:            time.Second * 5,
+			Enabled:              env.GetBool("RATE_LIMITER_ENABLED", true),
+		},
 	}
 
 	//Logger
@@ -94,6 +102,12 @@ func main() {
 		logger.Info("redis cache connection established")
 	}
 
+	// Rate limiter
+	rateLimiter := ratelimiter.NewFixedWindowLimiter(
+		cfg.rateLimiter.RequestsPerTimeFrame,
+		cfg.rateLimiter.TimeFrame,
+	)
+
 	store := store.NewStorage(db)
 	cacheStorage := cache.NewRedisStorage(rdb)
 	mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apikey, cfg.mail.fromEmail)
@@ -106,7 +120,17 @@ func main() {
 		logger:        logger,
 		mailer:        mailer,
 		authenticator: jwtAuthenticator,
+		rateLimiter:   rateLimiter,
 	}
+
+	// Metrics collected
+	expvar.NewString("version").Set(version)
+	expvar.Publish("database", expvar.Func(func() any {
+		return db.Stats()
+	}))
+	expvar.Publish("goroutines", expvar.Func(func() any {
+		return runtime.NumGoroutine()
+	}))
 
 	mux := app.mount()
 	logger.Fatal(app.run(mux))
