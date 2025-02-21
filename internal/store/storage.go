@@ -23,6 +23,7 @@ type Storage struct {
 	}
 	Users interface {
 		GetByID(context.Context, int64) (*User, error)
+		GetByEmail(context.Context, string) (*User, error)
 		Create(context.Context, *sql.Tx, *User) error
 		CreateAndInvite(context.Context, *User, string, time.Duration) error
 		Activate(context.Context, string) error
@@ -36,6 +37,9 @@ type Storage struct {
 		Follow(context.Context, int64, int64) error
 		UnFollow(context.Context, int64, int64) error
 	}
+	Roles interface {
+		GetByName(context.Context, string) (*Role, error)
+	}
 }
 
 func NewStorage(db *sql.DB) Storage {
@@ -44,6 +48,7 @@ func NewStorage(db *sql.DB) Storage {
 		Users:     &UserStore{db},
 		Comments:  &CommentStore{db},
 		Followers: &FollowerStore{db},
+		Roles:     &RoleStore{db},
 	}
 }
 

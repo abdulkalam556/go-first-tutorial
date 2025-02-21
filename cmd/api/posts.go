@@ -45,11 +45,13 @@ func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	user := getUserFromContext(r)
+
 	post := &store.Post{
 		Title:   payload.Title,
 		Content: payload.Content,
 		Tags:    payload.Tags,
-		UserID:  1,
+		UserID:  user.ID,
 	}
 
 	ctx := r.Context()
@@ -175,6 +177,7 @@ func (app *application) updatePostHandler(w http.ResponseWriter, r *http.Request
 
 	if err := app.store.Posts.Update(r.Context(), post); err != nil {
 		app.internalServerError(w, r, err)
+		return
 	}
 
 	if err := app.jsonResponse(w, http.StatusOK, post); err != nil {
