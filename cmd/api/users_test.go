@@ -18,11 +18,10 @@ func TestGetUser(t *testing.T) {
 	app := newTestApplication(t, withRedis)
 	mux := app.mount()
 
-	testToken := "abc123"
-	// testToken, err := app.authenticator.GenerateToken(nil)
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
+	testToken, err := app.authenticator.GenerateToken(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	t.Run("should not allow unauthenticated requests", func(t *testing.T) {
 		req, err := http.NewRequest(http.MethodGet, "/v1/users/1", nil)

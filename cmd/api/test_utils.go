@@ -5,7 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	//"github.com/MishNia/Sportify/internal/auth"
+	"github.com/MishNia/Sportify/internal/auth"
+	"github.com/MishNia/Sportify/internal/ratelimiter"
 	"github.com/MishNia/Sportify/internal/store"
 	"github.com/MishNia/Sportify/internal/store/cache"
 	"go.uber.org/zap"
@@ -20,21 +21,21 @@ func newTestApplication(t *testing.T, cfg config) *application {
 	mockStore := store.NewMockStore()
 	mockCacheStore := cache.NewMockStore()
 
-	//testAuth := &auth.TestAuthenticator{}
+	testAuth := &auth.TestAuthenticator{}
 
 	// Rate limiter
-	// rateLimiter := ratelimiter.NewFixedWindowLimiter(
-	// 	cfg.rateLimiter.RequestsPerTimeFrame,
-	// 	cfg.rateLimiter.TimeFrame,
-	// )
+	rateLimiter := ratelimiter.NewFixedWindowLimiter(
+		cfg.rateLimiter.RequestsPerTimeFrame,
+		cfg.rateLimiter.TimeFrame,
+	)
 
 	return &application{
 		logger:        logger,
 		store:         mockStore,
 		cacheStorage:  mockCacheStore,
+		authenticator: testAuth,
 		config:        cfg,
-		//authenticator: testAuth,
-		//rateLimiter:   rateLimiter,
+		rateLimiter:   rateLimiter,
 	}
 }
 
