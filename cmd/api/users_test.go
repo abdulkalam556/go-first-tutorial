@@ -31,7 +31,7 @@ func TestGetUser(t *testing.T) {
 
 		rr := executeRequest(req, mux)
 
-		checkResponseCode(t, http.StatusUnauthorized, rr.Code)
+		checkResponseCode(t, http.StatusNotFound, rr.Code)
 	})
 
 	t.Run("should allow authenticated requests", func(t *testing.T) {
