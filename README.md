@@ -23,3 +23,6 @@ This project was developed by following the **"Complete Backend Engineering Cour
 - migrate create -seq -ext sql -dir ./cmd/migrate/migrations create_users
 - migrate -path=./cmd/migrate/migrations -database="postgres://admin:adminpassword@localhost/social?sslmode=disable" up
 - migrate -path=./cmd/migrate/migrations -database="postgres://admin:adminpassword@localhost/social?sslmode=disable" down
+
+
+(cloud deployment link)[https://www.youtube.com/watch?v=9DmoG0tlGCY&t=7s]
