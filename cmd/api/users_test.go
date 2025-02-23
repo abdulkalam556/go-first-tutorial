@@ -18,7 +18,7 @@ func TestGetUser(t *testing.T) {
 	app := newTestApplication(t, withRedis)
 	mux := app.mount()
 
-	testToken, err := app.authenticator.GenerateToken(nil)
+	testToken, err := app.authenticator.GenarateToken(nil)
 	if err != nil {
 		t.Fatal(err)
 	}

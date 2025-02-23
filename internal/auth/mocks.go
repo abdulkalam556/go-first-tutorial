@@ -17,7 +17,7 @@ var testClaims = jwt.MapClaims{
 	"exp": time.Now().Add(time.Hour).Unix(),
 }
 
-func (a *TestAuthenticator) GenerateToken(claims jwt.Claims) (string, error) {
+func (a *TestAuthenticator) GenarateToken(claims jwt.Claims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, testClaims)
 
 	tokenString, _ := token.SignedString([]byte(secret))
