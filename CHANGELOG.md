@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/abdulkalam556/go-first-tutorial/compare/v1.0.0...v1.1.0) (2025-02-23)
+
+
+### Features
+
+* update api version script ([7495ab2](https://github.com/abdulkalam556/go-first-tutorial/commit/7495ab24dca7ca2c67d529da78dfe04b869238e1))
+
 ## 1.0.0 (2025-02-23)
 
 
